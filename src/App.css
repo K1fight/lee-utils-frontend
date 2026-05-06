@@ -5,32 +5,92 @@
   box-sizing: border-box;
 }
 
-/* Logo 区域 */
-.logo {
-  height: 64px;
+/* ========== 顶部导航栏 ========== */
+.top-header {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
-  border-bottom: 1px solid #f0f0f0;
+  padding: 0 24px !important;
+  height: 56px;
+  line-height: 56px;
+  background: #001529;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
-.logo-text {
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-right: 32px;
+  cursor: default;
+}
+
+.brand-icon {
+  font-size: 22px;
+  color: #40a9ff;
+}
+
+.brand-text {
   font-size: 18px;
-  font-weight: 600;
-  color: #1890ff;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.5px;
 }
 
-/* 天气卡片容器 */
-.weather-card-container {
-  position: absolute;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% - 32px);
+/* 导航菜单 — 深底色 */
+.header-menu {
+  flex: 1;
+  background: transparent !important;
+  border-bottom: none !important;
+  line-height: 54px;
 }
 
-/* 计数器按钮样式 */
+.header-menu .ant-menu-item {
+  color: rgba(255, 255, 255, 0.7) !important;
+  border-bottom: 2px solid transparent !important;
+  transition: color 0.2s, border-color 0.2s;
+  font-size: 14px;
+}
+
+.header-menu .ant-menu-item:hover {
+  color: #fff !important;
+}
+
+.header-menu .ant-menu-item-selected {
+  color: #fff !important;
+  border-bottom-color: #40a9ff !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-left: auto;
+}
+
+.header-avatar {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 50%;
+  transition: background 0.2s, color 0.2s;
+}
+
+.header-avatar:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ========== 主内容区 ========== */
+.main-content {
+  margin: 24px;
+}
+
+/* ========== 计数器按钮 ========== */
 .counter {
   padding: 8px 24px;
   font-size: 14px;
@@ -51,18 +111,4 @@
 
 .counter:active {
   transform: scale(0.98);
-}
-
-/* 侧边栏样式调整 */
-.ant-layout-sider {
-  position: relative;
-}
-
-.ant-layout-sider-children {
-  display: flex;
-  flex-direction: column;
-}
-
-.ant-menu {
-  flex: 1;
 }
