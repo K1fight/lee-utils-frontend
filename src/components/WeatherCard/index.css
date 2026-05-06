@@ -31,19 +31,20 @@
 .weather-main {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 50px;
   margin: 8px 0;
 }
 
 .weather-icon-large {
-  font-size: 48px;
+  font-size: 60px;
 }
 
 .weather-temp {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   gap: 4px;
+
 }
 
 .weather-details {

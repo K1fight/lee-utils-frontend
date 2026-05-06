@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import {useState, useEffect, JSX} from 'react';
 import { Card, Typography, Space, Tag, Skeleton } from 'antd';
 import { 
   CloudOutlined, 
@@ -16,52 +16,63 @@ const { Text, Title } = Typography;
 interface WeatherData {
   city: string;
   temperature: number;
-  condition: 'sunny' | 'cloudy' | 'rainy' | 'storm' | 'overcast';
+  condition: string;
   humidity: number;
   windSpeed: number;
   updateTime: string;
 }
+// 延时工具（通用）
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 // 模拟天气数据获取
-const fetchWeatherData = async (): Promise<WeatherData> => {
-  // 这里可以替换为真实的天气 API
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        city: '北京市',
-        temperature: 26,
-        condition: 'sunny',
-        humidity: 45,
-        windSpeed: 3.5,
-        updateTime: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })
-      });
-    }, 800);
-  });
+const fetchWeatherData = async (city?: string): Promise<WeatherData> => {
+
+  const res = await fetch(`/api/weather`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json}'
+        }
+      }
+      );
+  const data = await res.json();
+  const weatherData = data.data;
+  const {current: currentStats} = weatherData;
+
+  // 严格按照 WeatherData 返回
+  return {
+    city: city || '日照',
+    temperature: Math.round(currentStats.temp - 273.15),
+    condition: currentStats.weather[0].main,
+    humidity: currentStats.humidity,
+    windSpeed: currentStats.wind_speed,
+    updateTime: new Date(currentStats.dt * 1000).toLocaleString(),
+  };
 };
 
 // 天气图标映射
-const WeatherIcon = ({ condition, className }: { condition: string; className?: string }) => {
+const WeatherIcon = ({ condition, className }: { condition: string; className?: string }): JSX.Element => {
   const iconProps = { className };
   switch (condition) {
     case 'sunny':
-      return <SunOutlined {...iconProps} style={{ color: '#faad14' }} />;
-    case 'cloudy':
-      return <CloudOutlined {...iconProps} style={{ color: '#8c8c8c' }} />;
+      return <SunOutlined className={className} style={{ color: '#faad14' }} />;
+    case 'Clouds':
+      return <CloudOutlined className={className} style={{ color: '#8c8c8c' }} />;
     case 'rainy':
-      return <CloudFilled {...iconProps} style={{ color: '#1890ff' }} />;
+      return <CloudFilled className={className} style={{ color: '#1890ff' }} />;
     case 'storm':
-      return <ThunderboltOutlined {...iconProps} style={{ color: '#722ed1' }} />;
+      return <ThunderboltOutlined className={className} style={{ color: '#722ed1' }} />;
     case 'overcast':
-      return <CloudFilled {...iconProps} style={{ color: '#595959' }} />;
+      return <CloudFilled className={className} style={{ color: '#595959' }} />;
     default:
-      return <SunOutlined {...iconProps} style={{ color: '#faad14' }} />;
+      return <SunOutlined className={className} style={{ color: '#faad14' }} />;
   }
 };
 
 // 天气文本映射
 const weatherTextMap: Record<string, string> = {
   sunny: '晴朗',
-  cloudy: '多云',
+  Clouds: '多云',
   rainy: '小雨',
   storm: '雷阵雨',
   overcast: '阴天'
@@ -75,6 +86,7 @@ export default function WeatherCard() {
     setLoading(true);
     try {
       const data = await fetchWeatherData();
+
       setWeather(data);
     } catch (error) {
       console.error('获取天气失败:', error);
@@ -115,7 +127,7 @@ export default function WeatherCard() {
         />
       }
     >
-      <Space direction="vertical" size="small" style={{ width: '100%' }}>
+      <Space orientation="vertical" size="small" style={{ width: '100%' }}>
         {/* 城市位置 */}
         <Space>
           <EnvironmentOutlined style={{ color: '#1890ff' }} />
@@ -126,7 +138,7 @@ export default function WeatherCard() {
         <div className="weather-main">
           <WeatherIcon condition={weather.condition} className="weather-icon-large" />
           <div className="weather-temp">
-            <Title level={3} style={{ margin: 0 }}>
+            <Title level={2} style={{ margin: 0 }}>
               {weather.temperature}°
             </Title>
             <Tag color="blue" size="small">
