@@ -86,7 +86,6 @@ export default function WeatherCard() {
     setLoading(true);
     try {
       const data = await fetchWeatherData();
-
       setWeather(data);
     } catch (error) {
       console.error('获取天气失败:', error);
